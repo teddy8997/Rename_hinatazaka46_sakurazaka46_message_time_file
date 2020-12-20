@@ -1,0 +1,2 @@
+# Rename_hinatazaka46_sakurazaka46_message_time_file
+主要是把櫻坂/日向坂的message app備份下的檔案名的時間戳記從格林威治時間改成台灣時區
