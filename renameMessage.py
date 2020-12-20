@@ -15,9 +15,12 @@ import time
 
 def changeTime(f_name, y, m, d, hour, minute, sec):
     s = y + "-" + m + "-" + d + " " + hour + ":" + minute + ":" + sec
-    d = datetime.strptime(s,"%Y-%m-%d %H:%M:%S")
-    ts = calendar.timegm(d.utctimetuple())
-    local = str(datetime.fromtimestamp(ts))
+    try:      
+        d = datetime.strptime(s,"%Y-%m-%d %H:%M:%S")
+        ts = calendar.timegm(d.utctimetuple())
+        local = str(datetime.fromtimestamp(ts))
+    except ValueError:
+        return "Have been cganged"
 
     y = local[0:4]
     m = local[5:7]
@@ -25,7 +28,7 @@ def changeTime(f_name, y, m, d, hour, minute, sec):
     hour = local[11:13]
     minute = local[14:16]
     sec = local[17:]
-    stamp = y +"."+ m +"."+ d + "_" + hour + "時" + minute +"分" + sec + "秒"
+    stamp = y + m + d + hour + minute + sec 
     return stamp
 
     
@@ -39,8 +42,8 @@ sakurazaka46List = ["上村莉菜", "尾関梨香", "小池美波", "小林由�
                     "渡辺梨加", "渡邉理佐", "井上梨名", "遠藤光莉", "大園玲", "大沼晶保", "幸阪茉里乃", "関有美子","武元唯衣",
                     "田村保乃", "藤吉夏鈴", "増本綺良", "松田里奈", "松平璃子", "森田ひかる", "守屋麗奈", "山﨑天"]
 
-hinatazaka46Path = "./日向坂46／櫻坂46 メッセージ/日向坂46/"
-sakurazaka46Path = "./日向坂46／櫻坂46 メッセージ/櫻坂46/"
+hinatazaka46Path = "/日向坂46／櫻坂46 メッセージ/日向坂46/"
+sakurazaka46Path = "/日向坂46／櫻坂46 メッセージ/櫻坂46/"
 
 pathDict = { hinatazaka46Path : hinatazaka46List,
              sakurazaka46Path : sakurazaka46List}
@@ -51,7 +54,6 @@ for group in pathList:
     for n in pathDict[group]:
         if os.path.isdir(group + n):
             for f_name in os.listdir(group + n):
-                if len(f_name) == 27 :
                     y = f_name[9:13]
                     m = f_name[13:15]
                     d = f_name[15:17]
@@ -60,7 +62,8 @@ for group in pathList:
                     sec = f_name[21:23]
                     file = f_name[23:]
                     st = changeTime(f_name, y, m, d, hour, minute, sec)
-                    os.rename(group + n + "/" + f_name, group + n + "/" + f_name[0:9] + st +"_r"+ file)
+                    if st != "Have been cganged":
+                        os.rename(group + n + "/" + f_name, group + n + "/" +  st + "_" + f_name[7:8] + "_" + f_name[0:6] + file)
         else:
             continue
 
